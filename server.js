@@ -9,6 +9,8 @@ const collaboration = require("./routes/collaboration");
 const http = require("http");
 const socketIo = require("socket.io");
 
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -17,7 +19,7 @@ const server = http.createServer(app);
 const io = socketIo(server,{
 
     cors: {
-        origin: "*",
+        origin: "FRONTEND_URL",
         methods: ["GET","POST"]
     }
 });
@@ -39,7 +41,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
-const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const COHERE_API_KEY = process.env.COHERE_API_KEY;
 
 console.log("MONGO_URI:",MONGO_URI);
