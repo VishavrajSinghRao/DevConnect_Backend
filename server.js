@@ -12,16 +12,23 @@ const socketIo = require("socket.io");
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+    origin: FRONTEND_URL,
+    credentials: true
+  }));
+  
 app.use(express.json());
 
 const server = http.createServer(app);
 const io = socketIo(server,{
 
     cors: {
-        origin: "FRONTEND_URL",
-        methods: ["GET","POST"]
+        origin: FRONTEND_URL, // ✅ This will use the value from .env
+        methods: ["GET", "POST"],
+        credentials: true
     }
+    
 });
 
 io.on("connection", (socket) => {
@@ -84,7 +91,10 @@ app.use("/api/collaboration",collaboration);
 //     next();
 // });
 
-
+app.get("/", (req, res) => {
+    res.send("✅ Backend is live!");
+  });
+  
 
 app.get("/auth/github", (req, res) => {
     const forceLogin = req.query.force_login ? "&prompt=consent" : "";
@@ -332,6 +342,6 @@ app.get("/api/user/:githubId", async (req, res) => {
 
 
 
-/** ✅ Start Server */
-const PORT = 5000;
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
